@@ -1,28 +1,63 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+const data = [
+  { name: "Jan", value: -5 },
+  { name: "Feb", value: 0 },
+  { name: "Mar", value: 5 },
+  { name: "Apr", value: 12 },
+  { name: "May", value: 18 },
+  { name: "Jun", value: 22 },
+  { name: "Jul", value: 25 },
+  { name: "Aug", value: 24 },
+  { name: "Sep", value: 20 },
+  { name: "Oct", value: 14 },
+  { name: "Nov", value: 5 },
+  { name: "Dec", value: -2 },
+];
+function CustomTooltip({ active, payload, label }) {
+  if (active && payload && payload.length) {
+    const dataPoint = payload[0].payload;
+    return (
+      <div
+        style={{
+          background: "#fff",
+          border: "1px solid #ccc",
+          padding: "10px",
+          borderRadius: "5px",
+        }}
+      >
+        <p style={{ margin: 0 }}>
+          <strong>{label}</strong>
+        </p>
+        <p style={{ margin: 0 }}>Temperature: {dataPoint.value}°C</p>
+        <p style={{ margin: 0 }}>
+          Season:{" "}
+          {dataPoint.value >= 20
+            ? "Summer"
+            : dataPoint.value >= 10
+              ? "Spring/Fall"
+              : "Winter"}
+        </p>
+      </div>
+    );
+  }
+
+  return null;
+};
 
 function SimpleAreaChart() {
-  // Sample data for the chart
-  const data = [
-    { name: "Jan", value: 400 },
-    { name: "Feb", value: 300 },
-    { name: "Mar", value: 200 },
-    { name: "Apr", value: 278 },
-    { name: "May", value: 189 },
-    { name: "Jun", value: 239 },
-    { name: "Jul", value: 349 },
-    { name: "Aug", value: 430 },
-  ];
-
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Area type="monotone" dataKey="value" stroke="#8884d8" fill="#8884d8" />
-      </AreaChart>
-    </ResponsiveContainer>
+    <div>
+      Avg Temp throughout the year
+      <ResponsiveContainer width="100%" height={300}>
+        <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip content={<CustomTooltip />} />
+          <Area type="monotone" dataKey="value" stroke="#8884d8" fill="#8884d8" />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
   );
 };
 

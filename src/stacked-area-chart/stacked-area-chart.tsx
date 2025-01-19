@@ -48,7 +48,7 @@ const data = [
 export default function StackedAreaChart() {
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" height={300}>
       <AreaChart
         width={500}
         height={400}
