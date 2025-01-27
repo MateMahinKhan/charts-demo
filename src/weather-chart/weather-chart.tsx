@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { fetchWeatherApi } from "openmeteo";
 
+type WeatherData = { time: string; temperature: number };
+
 const WeatherChart = () => {
-  const [weatherData, setWeatherData] = useState([]);
+  const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,16 +29,16 @@ const WeatherChart = () => {
         const range = (start: number, stop: number, step: number): number[] =>
           Array.from({ length: Math.ceil((stop - start) / step) }, (_, i) => start + i * step);
 
-        const startTime = Number(hourly.time());
-        const endTime = Number(hourly.timeEnd());
-        const interval = hourly.interval();
+        const startTime = Number(hourly?.time() ?? 0);
+        const endTime = Number(hourly?.timeEnd() ?? 0);
+        const interval = hourly?.interval() ?? 1;
         const utcOffsetMillis = utcOffsetSeconds * 1000;
 
         const time = range(startTime, endTime, interval).map(
           (timestamp) => new Date(timestamp * 1000 + utcOffsetMillis + 5 * 60 * 60 * 1000).toISOString() // Add 5 hours
         );
 
-        const temperature2m = hourly.variables(0).valuesArray();
+        const temperature2m = hourly?.variables(0)?.valuesArray() ?? [];
 
         const chartData = time.map((t, i) => ({
           time: t,
