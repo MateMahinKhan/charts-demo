@@ -1,18 +1,18 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { TooltipProps } from 'recharts';
 const data = [
-  { name: "Jan", value: -5 },
-  { name: "Feb", value: 0 },
-  { name: "Mar", value: 5 },
-  { name: "Apr", value: 12 },
-  { name: "May", value: 18 },
-  { name: "Jun", value: 22 },
-  { name: "Jul", value: 25 },
-  { name: "Aug", value: 24 },
-  { name: "Sep", value: 20 },
-  { name: "Oct", value: 14 },
-  { name: "Nov", value: 5 },
-  { name: "Dec", value: -2 },
+  { name: "Jan", value: -3 },
+  { name: "Feb", value: -3 },
+  { name: "Mar", value: 1 },
+  { name: "Apr", value: 6 },
+  { name: "May", value: 12 },
+  { name: "Jun", value: 18 },
+  { name: "Jul", value: 22 },
+  { name: "Aug", value: 22 },
+  { name: "Sep", value: 18 },
+  { name: "Oct", value: 12 },
+  { name: "Nov", value: 4 },
+  { name: "Dec", value: 0 },
 ];
 function CustomTooltip({ active, payload, label }: TooltipProps<any, any>) {
   if (active && payload && payload.length) {
