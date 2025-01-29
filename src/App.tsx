@@ -1,27 +1,17 @@
 import './App.css'
-import SimpleAreaChart from "./area-chart/area-chart"
-import SimpleBarChart from "./bar-chart/bar-chart"
-import StackedAreaChart from "./stacked-area-chart/stacked-area-chart"
-import WeatherChart from "./weather-chart/weather-chart"
+import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
+import routes from './routes';
+import Navigation from "./navigation";
+
+const AppRoutes = () => useRoutes(routes);
 
 function App() {
-
   return (
     <>
-      <div className="grid-container">
-        <div className="grid-item">
-          <WeatherChart></WeatherChart>
-        </div>
-        <div className="grid-item">
-          <SimpleAreaChart></SimpleAreaChart>
-        </div>
-        <div className="grid-item">
-          <SimpleBarChart></SimpleBarChart>
-        </div>
-        <div className="grid-item">
-          <StackedAreaChart></StackedAreaChart>
-        </div>
-      </div>
+      <Router>
+        <Navigation />
+        <AppRoutes />
+      </Router>
     </>
   )
 }

@@ -4,7 +4,7 @@ import { fetchWeatherApi } from "openmeteo";
 
 type WeatherData = { time: string; temperature: number };
 
-const WeatherChart = () => {
+function WeatherChart({ days }: { days: number }) {
   const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -15,7 +15,7 @@ const WeatherChart = () => {
         longitude: -79.6139,
         hourly: "temperature_2m",
         timezone: "America/New_York",
-        forecast_days: 16,
+        forecast_days: days,
       };
       const url = "https://api.open-meteo.com/v1/forecast";
 
@@ -87,7 +87,7 @@ const WeatherChart = () => {
 
   return (
     <div>
-      <h2>16 Day Temperature Forecast</h2>
+      <h2>{days} Day Temperature Forecast</h2>
       <ResponsiveContainer width="100%" height={300}>
 
         <LineChart
