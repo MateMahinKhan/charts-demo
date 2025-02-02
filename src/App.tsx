@@ -1,9 +1,11 @@
-import AllCharts from "./all-charts/all-charts";
 import './App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import WeatherChart from "./weather-chart/weather-chart";
 
 import AppLayout from "./AppLayout";
+import { lazy } from "react";
+
+const AllCharts = lazy(() => import("./all-charts/all-charts"));
+const WeatherChart = lazy(() => import("./weather-chart/weather-chart"));
 
 const router = createBrowserRouter([
   {
