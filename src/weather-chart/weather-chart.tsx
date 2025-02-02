@@ -1,63 +1,55 @@
-import { useEffect, useState } from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { fetchWeatherApi } from "openmeteo";
+import { useLoaderData } from "react-router-dom";
 
 type WeatherData = { time: string; temperature: number };
 
-function WeatherChart({ days }: { days: number }) {
-  const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
-  const [loading, setLoading] = useState(true);
+export async function loader({ params }: any) {
+  const days = parseInt(params.days as string) || 16;
+  const requestParams = {
+    latitude: 43.597,
+    longitude: -79.6139,
+    hourly: "temperature_2m",
+    timezone: "America/New_York",
+    forecast_days: days,
+  };
+  const url = "https://api.open-meteo.com/v1/forecast";
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const params = {
-        latitude: 43.597,
-        longitude: -79.6139,
-        hourly: "temperature_2m",
-        timezone: "America/New_York",
-        forecast_days: days,
-      };
-      const url = "https://api.open-meteo.com/v1/forecast";
+  try {
+    const responses = await fetchWeatherApi(url, requestParams);
+    const response = responses[0];
 
-      try {
-        const responses = await fetchWeatherApi(url, params);
-        const response = responses[0];
+    const utcOffsetSeconds = response.utcOffsetSeconds();
+    const hourly = response.hourly();
 
-        const utcOffsetSeconds = response.utcOffsetSeconds();
-        const hourly = response.hourly();
+    const range = (start: number, stop: number, step: number): number[] =>
+      Array.from({ length: Math.ceil((stop - start) / step) }, (_, i) => start + i * step);
 
-        const range = (start: number, stop: number, step: number): number[] =>
-          Array.from({ length: Math.ceil((stop - start) / step) }, (_, i) => start + i * step);
+    const startTime = Number(hourly?.time() ?? 0);
+    const endTime = Number(hourly?.timeEnd() ?? 0);
+    const interval = hourly?.interval() ?? 1;
+    const utcOffsetMillis = utcOffsetSeconds * 1000;
 
-        const startTime = Number(hourly?.time() ?? 0);
-        const endTime = Number(hourly?.timeEnd() ?? 0);
-        const interval = hourly?.interval() ?? 1;
-        const utcOffsetMillis = utcOffsetSeconds * 1000;
+    const time = range(startTime, endTime, interval).map(
+      (timestamp) => new Date(timestamp * 1000 + utcOffsetMillis + 5 * 60 * 60 * 1000).toISOString() // Add 5 hours
+    );
 
-        const time = range(startTime, endTime, interval).map(
-          (timestamp) => new Date(timestamp * 1000 + utcOffsetMillis + 5 * 60 * 60 * 1000).toISOString() // Add 5 hours
-        );
+    const temperature2m = hourly?.variables(0)?.valuesArray() ?? [];
 
-        const temperature2m = hourly?.variables(0)?.valuesArray() ?? [];
-
-        const chartData = time.map((t, i) => ({
-          time: t,
-          temperature: parseFloat(temperature2m[i].toFixed(1)),
-        }));
+    const chartData = time.map((t, i) => ({
+      time: t,
+      temperature: parseFloat(temperature2m[i].toFixed(1)),
+    }));
 
 
-        setWeatherData(chartData);
-      } catch (error) {
-        console.error("Error fetching weather data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    return chartData;
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+  }
+}
 
-    fetchData();
-  }, []);
-
-  if (loading) return <p>Loading weather data...</p>;
+function WeatherChart() {
+  const weatherData = useLoaderData() as WeatherData[];
 
   const formatDate = (label: string): string => {
     const date = new Date(label);
@@ -87,7 +79,7 @@ function WeatherChart({ days }: { days: number }) {
 
   return (
     <div>
-      <h2>{days} Day Temperature Forecast</h2>
+      <h2> Day Temperature Forecast</h2>
       <ResponsiveContainer width="100%" height={300}>
 
         <LineChart

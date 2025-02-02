@@ -11,7 +11,7 @@ function AllCharts() {
     <>
       <div className="grid-container">
         <div className="grid-item">
-          <WeatherChart days={16}></WeatherChart>
+          <WeatherChart></WeatherChart>
         </div>
         <div className="grid-item">
           <SimpleAreaChart></SimpleAreaChart>
