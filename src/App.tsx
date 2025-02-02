@@ -1,18 +1,29 @@
+import AllCharts from "./all-charts/all-charts";
 import './App.css'
-import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
-import routes from './routes';
-import Navigation from "./navigation";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import WeatherChart from "./weather-chart/weather-chart";
 
-const AppRoutes = () => useRoutes(routes);
+import AppLayout from "./AppLayout";
+
+const router = createBrowserRouter([
+  {
+    element: <AppLayout></AppLayout>,
+    children: [
+      {
+        path: '/',
+        element: <AllCharts />,
+      },
+      {
+        path: '/sevenday',
+        element: <WeatherChart days={7}></WeatherChart>,
+      }
+    ]
+  }
+]);
 
 function App() {
   return (
-    <>
-      <Router>
-        <Navigation />
-        <AppRoutes />
-      </Router>
-    </>
+    <RouterProvider router={router} />
   )
 }
 
