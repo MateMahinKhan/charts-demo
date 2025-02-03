@@ -1,7 +1,12 @@
 import Header from "./Header";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigation } from "react-router-dom";
 
 function AppLayout() {
+  const navigation = useNavigation();
+
+  const isLoading = navigation.state === "loading";
+
+
   return (
     <div>
       <Header />
@@ -9,6 +14,7 @@ function AppLayout() {
         <main>
           <Outlet />
         </main>
+        {isLoading && 'Loading data'}
       </div>
     </div>
   );
