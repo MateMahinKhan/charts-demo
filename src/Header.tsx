@@ -4,7 +4,7 @@ function Header() {
   return (
     <header>
       <div>
-        <Link to="/">Mississauga Weather Co.</Link>
+        <Link to="/charts-demo">Mississauga Weather Co.</Link>
       </div>
       <div>
         <Link to="/sevenday">Seven day chart</Link>
