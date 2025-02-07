@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     element: <AppLayout></AppLayout>,
     children: [
       {
-        path: '/',
+        path: '/charts-demo',
         element: <AllCharts />,
         loader: weatherChartLoader
       },
